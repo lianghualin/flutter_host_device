@@ -56,16 +56,20 @@ class DemoPage extends StatefulWidget {
   State<DemoPage> createState() => _DemoPageState();
 }
 
-class _DemoPageState extends State<DemoPage> {
-  static const _portCounts = [1, 2, 3, 4, 5, 6];
+enum _Scenario { host, agent }
 
+class _DemoPageState extends State<DemoPage> {
+  _Scenario _scenario = _Scenario.host;
   int _selectedPortCount = 5;
   Map<int, PortStatus> _portStatuses = {};
   bool _isConfig = false;
   bool _useCustomLabels = false;
   final List<String> _eventLog = [];
 
-  static const _customLabels = {
+  static const _hostPortCounts = [1, 2, 3, 4, 5, 6];
+  static const _agentPortCounts = [1, 2];
+
+  static const _hostLabels = {
     1: 'eth0',
     2: 'eth1',
     3: 'MGMT',
@@ -73,6 +77,33 @@ class _DemoPageState extends State<DemoPage> {
     5: 'iLO',
     6: 'SAN',
   };
+
+  static const _agentLabels = {
+    1: 'NETA',
+    2: 'NETB',
+  };
+
+  List<int> get _portCounts =>
+      _scenario == _Scenario.host ? _hostPortCounts : _agentPortCounts;
+
+  Map<int, String> get _customLabels =>
+      _scenario == _Scenario.host ? _hostLabels : _agentLabels;
+
+  TopoDeviceType get _deviceType =>
+      _scenario == _Scenario.host ? TopoDeviceType.host : TopoDeviceType.agent;
+
+  String get _centerLabel =>
+      _scenario == _Scenario.host ? 'Host-Server-01' : 'Agent-DPU-01';
+
+  void _switchScenario(_Scenario scenario) {
+    setState(() {
+      _scenario = scenario;
+      _selectedPortCount = _portCounts.contains(_selectedPortCount)
+          ? _selectedPortCount
+          : _portCounts.last;
+      _portStatuses = {};
+    });
+  }
 
   void _randomizeStatuses() {
     final rng = Random();
@@ -104,6 +135,15 @@ class _DemoPageState extends State<DemoPage> {
               runSpacing: 8,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
+                SegmentedButton<_Scenario>(
+                  segments: const [
+                    ButtonSegment(value: _Scenario.host, label: Text('Host')),
+                    ButtonSegment(value: _Scenario.agent, label: Text('Agent')),
+                  ],
+                  selected: {_scenario},
+                  onSelectionChanged: (s) => _switchScenario(s.first),
+                ),
+                const SizedBox(width: 8),
                 DropdownButton<int>(
                   value: _selectedPortCount,
                   items: _portCounts
@@ -167,11 +207,12 @@ class _DemoPageState extends State<DemoPage> {
                   );
                   return HostDeviceView(
                     size: viewSize,
+                    deviceType: _deviceType,
                     portCount: _selectedPortCount,
                     portStatuses: _portStatuses,
                     portLabels: _useCustomLabels ? _customLabels : const {},
                     isConfig: _isConfig,
-                    centerLabel: 'Host-Server-01',
+                    centerLabel: _centerLabel,
                     onPortHover: (port) => _log('Hover: port $port'),
                     onPortHoverExit: () {},
                     onPortTap: (port) => _log('Tap: port $port'),

@@ -24,6 +24,8 @@ class HostDeviceView extends StatelessWidget {
     this.centerLabel,
     this.centerYFactor = 0.6,
     this.centerDeviceBuilder,
+    this.portPositionOverride,
+    this.portSize,
     this.onPortHover,
     this.onPortHoverExit,
     this.onPortTap,
@@ -55,6 +57,14 @@ class HostDeviceView extends StatelessWidget {
   /// When null, the built-in [HostBodyWidget] is used.
   final Widget Function(BuildContext context, Size bodySize, HostDeviceTheme theme)? centerDeviceBuilder;
 
+  /// Normalized port positions (0.0–1.0) relative to the center device body.
+  /// When provided, ports are placed on the body instead of the semi-elliptical arc.
+  /// Key is port number (1-based), value is Offset(x%, y%) within the body bounds.
+  final Map<int, Offset>? portPositionOverride;
+
+  /// Port icon size in logical pixels. Defaults to [HostLayout.portSize] (45).
+  final double? portSize;
+
   final ValueChanged<int>? onPortHover;
   final VoidCallback? onPortHoverExit;
   final ValueChanged<int>? onPortTap;
@@ -85,6 +95,8 @@ class HostDeviceView extends StatelessWidget {
         (Theme.of(context).brightness == Brightness.dark
             ? const HostDeviceTheme.dark()
             : const HostDeviceTheme.light());
+
+    final resolvedPortSize = portSize ?? HostLayout.portSize;
 
     final centerSize = HostLayout.computeCenterSize(size);
     final hostCenter = HostLayout.computeHostCenter(
@@ -156,25 +168,45 @@ class HostDeviceView extends StatelessWidget {
                 ),
               ),
 
-            // Ports
-            for (final entry in portCenters.entries)
-              PortWidget(
-                portNumber: entry.key,
-                label: portLabels[entry.key],
-                position: Offset(
-                  entry.value.dx - HostLayout.portSize / 2,
-                  entry.value.dy - HostLayout.portSize / 2,
+            // Ports — use override positions if provided, otherwise arc layout
+            if (portPositionOverride != null)
+              for (final entry in portPositionOverride!.entries)
+                PortWidget(
+                  portNumber: entry.key,
+                  label: portLabels[entry.key],
+                  position: Offset(
+                    bodyLeft + entry.value.dx * monitorWidth - resolvedPortSize / 2,
+                    bodyTop + entry.value.dy * totalHeight - resolvedPortSize / 2,
+                  ),
+                  size: resolvedPortSize,
+                  status: isConfig
+                      ? PortStatus.down
+                      : (portStatuses[entry.key] ?? PortStatus.unknown),
+                  theme: resolvedTheme,
+                  isConfig: isConfig,
+                  onHover: () => onPortHover?.call(entry.key),
+                  onHoverExit: onPortHoverExit,
+                  onTap: () => onPortTap?.call(entry.key),
+                )
+            else
+              for (final entry in portCenters.entries)
+                PortWidget(
+                  portNumber: entry.key,
+                  label: portLabels[entry.key],
+                  position: Offset(
+                    entry.value.dx - resolvedPortSize / 2,
+                    entry.value.dy - resolvedPortSize / 2,
+                  ),
+                  size: resolvedPortSize,
+                  status: isConfig
+                      ? PortStatus.down
+                      : (portStatuses[entry.key] ?? PortStatus.unknown),
+                  theme: resolvedTheme,
+                  isConfig: isConfig,
+                  onHover: () => onPortHover?.call(entry.key),
+                  onHoverExit: onPortHoverExit,
+                  onTap: () => onPortTap?.call(entry.key),
                 ),
-                size: HostLayout.portSize,
-                status: isConfig
-                    ? PortStatus.down
-                    : (portStatuses[entry.key] ?? PortStatus.unknown),
-                theme: resolvedTheme,
-                isConfig: isConfig,
-                onHover: () => onPortHover?.call(entry.key),
-                onHoverExit: onPortHoverExit,
-                onTap: () => onPortTap?.call(entry.key),
-              ),
           ],
         ),
       ),
