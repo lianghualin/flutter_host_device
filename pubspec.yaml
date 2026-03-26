@@ -1,6 +1,6 @@
 name: flutter_host_device
 description: A Flutter widget that renders host devices with ports, fully programmatic — no SVG assets required.
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/lianghualin/flutter_host_device
 repository: https://github.com/lianghualin/flutter_host_device
 issue_tracker: https://github.com/lianghualin/flutter_host_device/issues

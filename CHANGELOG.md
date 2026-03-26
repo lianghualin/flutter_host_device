@@ -1,3 +1,16 @@
+## 0.2.0
+
+- Add Agent (DPU) scenario support with `TopoDeviceType.agent`
+- Add `portPositionOverride` parameter for on-body port placement
+- Add `portSize` parameter for custom port icon sizing
+- Add Host/Agent scenario toggle in example app
+- Agent uses NETA/NETB port labels with semi-elliptical arc layout
+- Upgrade `topology_view_icons` to 1.2.1 (adds `TopoPortPainter`)
+- Replace custom `PortPainter` with `TopoPortPainter` (LNM style RJ45 icons)
+- Increase default port size from 30px to 45px for better RJ45 icon readability
+- Move port labels below icon instead of overlapping
+- Re-export `TopoPortPainter` from barrel file
+
 ## 0.1.0
 
 - Initial release

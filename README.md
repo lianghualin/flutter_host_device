@@ -1,16 +1,18 @@
 # flutter_host_device
 
-A Flutter widget that renders host devices with ports arranged in a semi-elliptical arc. Fully programmatic — no SVG assets required. Uses [topology_view_icons](https://pub.dev/packages/topology_view_icons) for device and port rendering.
+A Flutter widget that renders host and agent (DPU) devices with ports arranged in a semi-elliptical arc. Fully programmatic — no SVG assets required. Uses [topology_view_icons](https://pub.dev/packages/topology_view_icons) for device and port rendering.
 
 ## Features
 
-- Programmatic host device rendering with configurable device type icons
-- Interactive RJ45 port icons with hover animation and status colors (link up / down / disabled)
+- Programmatic host/agent device rendering with configurable device type icons
+- Interactive RJ45 port icons (LNM hardware style) with hover animation and status LED (link up / down / disabled)
 - Semi-elliptical port arc layout (dynamic port count, no presets needed)
+- On-body port placement via `portPositionOverride` for devices with built-in ports
+- Configurable port size for different device form factors
 - Dark and light theme support with auto-detection
 - Custom port labels and replaceable center device
 - `getPortPositions()` API for consumers drawing connection lines
-- Stacked switch, router, server, and other device types via `TopoDeviceType`
+- Supports all device types: host, agent, router, server, switch, firewall, etc.
 
 ## Getting started
 
@@ -18,10 +20,12 @@ Add the dependency:
 
 ```yaml
 dependencies:
-  flutter_host_device: ^0.1.0
+  flutter_host_device: ^0.2.0
 ```
 
 ## Usage
+
+### Host device
 
 ```dart
 import 'package:flutter_host_device/flutter_host_device.dart';
@@ -31,6 +35,19 @@ HostDeviceView(
   portCount: 6,
   portStatuses: {1: PortStatus.up, 2: PortStatus.down, 3: PortStatus.up},
   centerLabel: 'Host-Server-01',
+  onPortTap: (portNum) => print('Tapped port $portNum'),
+)
+```
+
+### Agent (DPU) device
+
+```dart
+HostDeviceView(
+  size: Size(800, 400),
+  deviceType: TopoDeviceType.agent,
+  portCount: 2,
+  portLabels: {1: 'NETA', 2: 'NETB'},
+  centerLabel: 'Agent-DPU-01',
   onPortTap: (portNum) => print('Tapped port $portNum'),
 )
 ```
@@ -61,6 +78,24 @@ HostDeviceView(
   centerDeviceBuilder: (context, size, theme) {
     return Image.asset('assets/my_custom_host.png', fit: BoxFit.contain);
   },
+  // ...
+)
+```
+
+### On-body port placement
+
+For devices where ports are physically on the device body (e.g., agent/DPU):
+
+```dart
+HostDeviceView(
+  deviceType: TopoDeviceType.agent,
+  portCount: 2,
+  portSize: 18,
+  portPositionOverride: {
+    1: Offset(0.39, 0.67),  // NETA position (normalized)
+    2: Offset(0.39, 0.77),  // NETB position (normalized)
+  },
+  portLabels: {1: 'NETA', 2: 'NETB'},
   // ...
 )
 ```
