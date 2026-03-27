@@ -227,5 +227,38 @@ void main() {
       );
       expect(transform.transform.getTranslation().y, 0.0);
     });
+
+    testWidgets('hover exit does not reverse animation when isSelected is true',
+        (tester) async {
+  await tester.pumpWidget(wrapInApp(
+    PortWidget(
+      portNumber: 1,
+      position: const Offset(100, 100),
+      size: 30,
+      status: PortStatus.up,
+      theme: theme,
+      isSelected: true,
+    ),
+  ));
+  await tester.pumpAndSettle();
+
+  final gesture =
+      await tester.createGesture(kind: PointerDeviceKind.mouse);
+  await gesture.addPointer(location: Offset.zero);
+  addTearDown(gesture.removePointer);
+  // Enter then exit
+  await gesture.moveTo(tester.getCenter(find.byType(PortWidget)));
+  await tester.pump();
+  await gesture.moveTo(Offset.zero);
+  await tester.pumpAndSettle();
+
+  final transform = tester.widget<Transform>(
+    find.descendant(
+      of: find.byType(GestureDetector),
+      matching: find.byType(Transform),
+    ),
+  );
+  expect(transform.transform.getTranslation().y, -3.0);
+});
   });
 }
