@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_host_device/src/models/port_status.dart';
 import 'package:flutter_host_device/src/widgets/host_device_view.dart';
+import 'package:flutter_host_device/src/widgets/port_widget.dart';
 
 void main() {
   Widget wrapInApp(Widget child) {
@@ -90,6 +91,68 @@ void main() {
         ),
       );
       expect(find.byType(HostDeviceView), findsOneWidget);
+    });
+
+    testWidgets('passes isSelected=true to selected ports', (tester) async {
+      await tester.pumpWidget(
+        wrapInApp(
+          HostDeviceView(
+            size: const Size(800, 400),
+            portCount: 3,
+            selectedPortNumbers: const {2},
+          ),
+        ),
+      );
+
+      final portWidgets = tester.widgetList<PortWidget>(
+        find.byType(PortWidget),
+      );
+      final port2 = portWidgets.firstWhere((p) => p.portNumber == 2);
+      final port1 = portWidgets.firstWhere((p) => p.portNumber == 1);
+      expect(port2.isSelected, isTrue);
+      expect(port1.isSelected, isFalse);
+    });
+
+    testWidgets('dims unselected ports when selection is active', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapInApp(
+          HostDeviceView(
+            size: const Size(800, 400),
+            portCount: 3,
+            selectedPortNumbers: const {2},
+            unselectedPortOpacity: 0.15,
+          ),
+        ),
+      );
+
+      final portWidgets = tester.widgetList<PortWidget>(
+        find.byType(PortWidget),
+      );
+      final port2 = portWidgets.firstWhere((p) => p.portNumber == 2);
+      final port1 = portWidgets.firstWhere((p) => p.portNumber == 1);
+      expect(port2.opacity, 1.0);
+      expect(port1.opacity, 0.15);
+    });
+
+    testWidgets('all ports full opacity when no selection', (tester) async {
+      await tester.pumpWidget(
+        wrapInApp(
+          HostDeviceView(
+            size: const Size(800, 400),
+            portCount: 3,
+            unselectedPortOpacity: 0.15,
+          ),
+        ),
+      );
+
+      final portWidgets = tester.widgetList<PortWidget>(
+        find.byType(PortWidget),
+      );
+      for (final port in portWidgets) {
+        expect(port.opacity, 1.0);
+      }
     });
   });
 

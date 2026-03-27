@@ -31,6 +31,8 @@ class HostDeviceView extends StatelessWidget {
     this.onPortTap,
     this.onHostHover,
     this.onHostHoverExit,
+    this.selectedPortNumbers = const {},
+    this.unselectedPortOpacity = 1.0,
     this.theme,
   });
 
@@ -75,6 +77,15 @@ class HostDeviceView extends StatelessWidget {
   final ValueChanged<int>? onPortTap;
   final VoidCallback? onHostHover;
   final VoidCallback? onHostHoverExit;
+
+  /// Port numbers that are currently selected. Selected ports keep their
+  /// hover float animation at the forward position.
+  /// Empty set means no selection (all ports at full opacity).
+  final Set<int> selectedPortNumbers;
+
+  /// Opacity applied to ports NOT in [selectedPortNumbers] when the selection
+  /// is non-empty. Defaults to 1.0 (no dimming). Use ~0.15 for spotlight mode.
+  final double unselectedPortOpacity;
 
   /// Optional theme override. When null, auto-detects from app brightness.
   final HostDeviceTheme? theme;
@@ -123,6 +134,8 @@ class HostDeviceView extends StatelessWidget {
 
     // Label font size
     final labelFontSize = max(16.0, min(18.0, centerSize / 12));
+
+    final hasSelection = selectedPortNumbers.isNotEmpty;
 
     return MouseRegion(
       onEnter: (_) => onHostHover?.call(),
@@ -198,6 +211,11 @@ class HostDeviceView extends StatelessWidget {
                       : (portStatuses[entry.key] ?? PortStatus.unknown),
                   theme: resolvedTheme,
                   isConfig: isConfig,
+                  isSelected: selectedPortNumbers.contains(entry.key),
+                  opacity:
+                      hasSelection && !selectedPortNumbers.contains(entry.key)
+                      ? unselectedPortOpacity
+                      : 1.0,
                   onHover: () => onPortHover?.call(entry.key),
                   onHoverExit: onPortHoverExit,
                   onTap: () => onPortTap?.call(entry.key),
@@ -217,6 +235,11 @@ class HostDeviceView extends StatelessWidget {
                       : (portStatuses[entry.key] ?? PortStatus.unknown),
                   theme: resolvedTheme,
                   isConfig: isConfig,
+                  isSelected: selectedPortNumbers.contains(entry.key),
+                  opacity:
+                      hasSelection && !selectedPortNumbers.contains(entry.key)
+                      ? unselectedPortOpacity
+                      : 1.0,
                   onHover: () => onPortHover?.call(entry.key),
                   onHoverExit: onPortHoverExit,
                   onTap: () => onPortTap?.call(entry.key),
