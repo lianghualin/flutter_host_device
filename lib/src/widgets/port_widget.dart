@@ -16,6 +16,7 @@ class PortWidget extends StatefulWidget {
     this.label,
     this.isConfig = false,
     this.isSelected = false,
+    this.opacity = 1.0,
     this.onHover,
     this.onHoverExit,
     this.onTap,
@@ -39,6 +40,10 @@ class PortWidget extends StatefulWidget {
   /// When true, the hover float animation is held at the forward position
   /// regardless of mouse hover state.
   final bool isSelected;
+
+  /// Opacity for the entire port widget. Defaults to 1.0 (fully opaque).
+  /// Use values < 1.0 to dim unselected ports in spotlight mode.
+  final double opacity;
 
   final VoidCallback? onHover;
   final VoidCallback? onHoverExit;
@@ -86,6 +91,11 @@ class _PortWidgetState extends State<PortWidget>
     super.dispose();
   }
 
+  Widget _maybeWrapOpacity({required Widget child}) {
+    if (widget.opacity >= 1.0) return child;
+    return Opacity(opacity: widget.opacity, child: child);
+  }
+
   @override
   Widget build(BuildContext context) {
     final portColor = widget.theme.portColorForStatus(
@@ -97,7 +107,8 @@ class _PortWidgetState extends State<PortWidget>
     return Positioned(
       left: widget.position.dx,
       top: widget.position.dy,
-      child: MouseRegion(
+      child: _maybeWrapOpacity(
+        child: MouseRegion(
         onEnter: (_) {
           _controller.forward();
           widget.onHover?.call();
@@ -145,6 +156,7 @@ class _PortWidgetState extends State<PortWidget>
           ),
         ),
       ),
+    ),
     );
   }
 }

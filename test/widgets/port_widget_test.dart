@@ -260,5 +260,35 @@ void main() {
   );
   expect(transform.transform.getTranslation().y, -3.0);
 });
+
+    testWidgets('applies opacity when provided', (tester) async {
+      await tester.pumpWidget(wrapInApp(
+        PortWidget(
+          portNumber: 1,
+          position: const Offset(100, 100),
+          size: 30,
+          status: PortStatus.up,
+          theme: theme,
+          opacity: 0.15,
+        ),
+      ));
+
+      final opacity = tester.widget<Opacity>(find.byType(Opacity));
+      expect(opacity.opacity, 0.15);
+    });
+
+    testWidgets('does not wrap in Opacity when opacity is 1.0', (tester) async {
+      await tester.pumpWidget(wrapInApp(
+        PortWidget(
+          portNumber: 1,
+          position: const Offset(100, 100),
+          size: 30,
+          status: PortStatus.up,
+          theme: theme,
+        ),
+      ));
+
+      expect(find.byType(Opacity), findsNothing);
+    });
   });
 }
