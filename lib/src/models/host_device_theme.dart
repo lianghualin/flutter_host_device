@@ -32,39 +32,39 @@ class HostDeviceTheme {
 
   /// Dark theme — matches the switch device dark theme colors.
   const HostDeviceTheme.dark()
-      : bodyGradientStart = const Color(0xFF5A5A6E),
-        bodyGradientEnd = const Color(0xFF44445A),
-        portUp = const Color(0xFF2CC339),
-        portDown = const Color(0xFF9E9E9E),
-        portUnknown = const Color(0xFF333333),
-        portLabelOnLight = const Color(0xFFFFFFFF),
-        portLabelOnDark = const Color(0xFFFFFFFF),
-        activeColor = const Color(0xFF2CC339),
-        ledGreen = const Color(0xFF49B87D),
-        ledYellow = const Color(0xFFF0CC18),
-        ledInactive = const Color(0xFF414142),
-        shadowOpacity = 0.4,
-        screenGradientStart = const Color(0xFFE2E2E2),
-        screenGradientEnd = const Color(0xFFD0D0D0),
-        screenBorderColor = const Color(0x1A000000);
+    : bodyGradientStart = const Color(0xFF5A5A6E),
+      bodyGradientEnd = const Color(0xFF44445A),
+      portUp = const Color(0xFF2CC339),
+      portDown = const Color(0xFF9E9E9E),
+      portUnknown = const Color(0xFF333333),
+      portLabelOnLight = const Color(0xFFFFFFFF),
+      portLabelOnDark = const Color(0xFFFFFFFF),
+      activeColor = const Color(0xFF2CC339),
+      ledGreen = const Color(0xFF49B87D),
+      ledYellow = const Color(0xFFF0CC18),
+      ledInactive = const Color(0xFF414142),
+      shadowOpacity = 0.4,
+      screenGradientStart = const Color(0xFFE2E2E2),
+      screenGradientEnd = const Color(0xFFD0D0D0),
+      screenBorderColor = const Color(0x1A000000);
 
   /// Light theme — lighter body, same port colors as dark for consistency.
   const HostDeviceTheme.light()
-      : bodyGradientStart = const Color(0xFFD8DAE0),
-        bodyGradientEnd = const Color(0xFFC2C4CC),
-        portUp = const Color(0xFF2CC339),
-        portDown = const Color(0xFF9E9E9E),
-        portUnknown = const Color(0xFF333333),
-        portLabelOnLight = const Color(0xFF444444),
-        portLabelOnDark = const Color(0xFFFFFFFF),
-        activeColor = const Color(0xFF2CC339),
-        ledGreen = const Color(0xFF34A853),
-        ledYellow = const Color(0xFFE8A317),
-        ledInactive = const Color(0xFFB0B2BA),
-        shadowOpacity = 0.12,
-        screenGradientStart = const Color(0xFFF0F0F0),
-        screenGradientEnd = const Color(0xFFE8E8E8),
-        screenBorderColor = const Color(0x0D000000);
+    : bodyGradientStart = const Color(0xFFD8DAE0),
+      bodyGradientEnd = const Color(0xFFC2C4CC),
+      portUp = const Color(0xFF2CC339),
+      portDown = const Color(0xFF9E9E9E),
+      portUnknown = const Color(0xFF333333),
+      portLabelOnLight = const Color(0xFF444444),
+      portLabelOnDark = const Color(0xFFFFFFFF),
+      activeColor = const Color(0xFF2CC339),
+      ledGreen = const Color(0xFF34A853),
+      ledYellow = const Color(0xFFE8A317),
+      ledInactive = const Color(0xFFB0B2BA),
+      shadowOpacity = 0.12,
+      screenGradientStart = const Color(0xFFF0F0F0),
+      screenGradientEnd = const Color(0xFFE8E8E8),
+      screenBorderColor = const Color(0x0D000000);
 
   final Color bodyGradientStart;
   final Color bodyGradientEnd;
@@ -137,20 +137,20 @@ class HostDeviceTheme {
 
   @override
   int get hashCode => Object.hash(
-        bodyGradientStart,
-        bodyGradientEnd,
-        portUp,
-        portDown,
-        portUnknown,
-        portLabelOnLight,
-        portLabelOnDark,
-        activeColor,
-        ledGreen,
-        ledYellow,
-        ledInactive,
-        shadowOpacity,
-        screenGradientStart,
-        screenGradientEnd,
-        screenBorderColor,
-      );
+    bodyGradientStart,
+    bodyGradientEnd,
+    portUp,
+    portDown,
+    portUnknown,
+    portLabelOnLight,
+    portLabelOnDark,
+    activeColor,
+    ledGreen,
+    ledYellow,
+    ledInactive,
+    shadowOpacity,
+    screenGradientStart,
+    screenGradientEnd,
+    screenBorderColor,
+  );
 }

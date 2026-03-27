@@ -123,12 +123,14 @@ class HostIconPainter extends CustomPainter {
   void _drawNeck(Canvas canvas, double w, double neckTop, double neckBottom) {
     final neckW = w * 0.15;
     final neckLeft = (w - neckW) / 2;
-    final neckRect = Rect.fromLTRB(neckLeft, neckTop, neckLeft + neckW, neckBottom);
-
-    canvas.drawRect(
-      neckRect,
-      Paint()..color = theme.bodyGradientEnd,
+    final neckRect = Rect.fromLTRB(
+      neckLeft,
+      neckTop,
+      neckLeft + neckW,
+      neckBottom,
     );
+
+    canvas.drawRect(neckRect, Paint()..color = theme.bodyGradientEnd);
   }
 
   void _drawBase(Canvas canvas, double w, double baseTop, double baseH) {

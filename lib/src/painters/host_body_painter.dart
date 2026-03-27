@@ -146,7 +146,12 @@ class HostBodyPainter extends CustomPainter {
   void _drawNeck(Canvas canvas, double w, double neckTop, double neckBottom) {
     final neckW = w * 0.15;
     final neckLeft = (w - neckW) / 2;
-    final neckRect = Rect.fromLTRB(neckLeft, neckTop, neckLeft + neckW, neckBottom);
+    final neckRect = Rect.fromLTRB(
+      neckLeft,
+      neckTop,
+      neckLeft + neckW,
+      neckBottom,
+    );
 
     // Darker shade of body gradient
     final neckPaint = Paint()
@@ -190,11 +195,7 @@ class HostBodyPainter extends CustomPainter {
 
 /// Renders a host body inside a [PhysicalShape] for elevation & shadow.
 class HostBodyWidget extends StatelessWidget {
-  const HostBodyWidget({
-    super.key,
-    required this.theme,
-    this.elevation = 5,
-  });
+  const HostBodyWidget({super.key, required this.theme, this.elevation = 5});
 
   final double elevation;
   final HostDeviceTheme theme;
@@ -229,29 +230,30 @@ class _HostBodyClipper extends CustomClipper<Path> {
     final path = Path();
 
     // Monitor
-    path.addRRect(RRect.fromRectAndRadius(
-      Rect.fromLTWH(0, 0, w, monitorH),
-      Radius.circular(cornerR),
-    ));
+    path.addRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, w, monitorH),
+        Radius.circular(cornerR),
+      ),
+    );
 
     // Neck
     final neckLeft = (w - neckW) / 2;
-    path.addRect(Rect.fromLTRB(
-      neckLeft,
-      monitorH,
-      neckLeft + neckW,
-      monitorH + neckH,
-    ));
+    path.addRect(
+      Rect.fromLTRB(neckLeft, monitorH, neckLeft + neckW, monitorH + neckH),
+    );
 
     // Base
     final baseLeft = (w - baseW) / 2;
-    path.addRRect(RRect.fromRectAndCorners(
-      Rect.fromLTWH(baseLeft, monitorH + neckH, baseW, baseH),
-      topLeft: const Radius.circular(2.0),
-      topRight: const Radius.circular(2.0),
-      bottomLeft: const Radius.circular(4.0),
-      bottomRight: const Radius.circular(4.0),
-    ));
+    path.addRRect(
+      RRect.fromRectAndCorners(
+        Rect.fromLTWH(baseLeft, monitorH + neckH, baseW, baseH),
+        topLeft: const Radius.circular(2.0),
+        topRight: const Radius.circular(2.0),
+        bottomLeft: const Radius.circular(4.0),
+        bottomRight: const Radius.circular(4.0),
+      ),
+    );
 
     return path;
   }

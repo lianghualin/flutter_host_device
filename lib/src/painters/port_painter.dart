@@ -24,11 +24,7 @@ class PortPainter extends CustomPainter {
     const lineCount = 3;
     for (int i = 1; i <= lineCount; i++) {
       final y = h * (i / (lineCount + 1));
-      canvas.drawLine(
-        Offset(w * 0.2, y),
-        Offset(w * 0.8, y),
-        linePaint,
-      );
+      canvas.drawLine(Offset(w * 0.2, y), Offset(w * 0.8, y), linePaint);
     }
   }
 

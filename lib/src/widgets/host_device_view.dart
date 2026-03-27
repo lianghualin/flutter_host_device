@@ -55,7 +55,12 @@ class HostDeviceView extends StatelessWidget {
   /// Optional builder to replace the default host body with a custom widget.
   /// Receives the available size and resolved theme.
   /// When null, the built-in [HostBodyWidget] is used.
-  final Widget Function(BuildContext context, Size bodySize, HostDeviceTheme theme)? centerDeviceBuilder;
+  final Widget Function(
+    BuildContext context,
+    Size bodySize,
+    HostDeviceTheme theme,
+  )?
+  centerDeviceBuilder;
 
   /// Normalized port positions (0.0–1.0) relative to the center device body.
   /// When provided, ports are placed on the body instead of the semi-elliptical arc.
@@ -91,7 +96,8 @@ class HostDeviceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final resolvedTheme = theme ??
+    final resolvedTheme =
+        theme ??
         (Theme.of(context).brightness == Brightness.dark
             ? const HostDeviceTheme.dark()
             : const HostDeviceTheme.light());
@@ -134,7 +140,11 @@ class HostDeviceView extends StatelessWidget {
               width: monitorWidth,
               height: totalHeight,
               child: centerDeviceBuilder != null
-                  ? centerDeviceBuilder!(context, Size(monitorWidth, totalHeight), resolvedTheme)
+                  ? centerDeviceBuilder!(
+                      context,
+                      Size(monitorWidth, totalHeight),
+                      resolvedTheme,
+                    )
                   : CustomPaint(
                       painter: TopoIconPainter(
                         deviceType: deviceType,
@@ -175,8 +185,12 @@ class HostDeviceView extends StatelessWidget {
                   portNumber: entry.key,
                   label: portLabels[entry.key],
                   position: Offset(
-                    bodyLeft + entry.value.dx * monitorWidth - resolvedPortSize / 2,
-                    bodyTop + entry.value.dy * totalHeight - resolvedPortSize / 2,
+                    bodyLeft +
+                        entry.value.dx * monitorWidth -
+                        resolvedPortSize / 2,
+                    bodyTop +
+                        entry.value.dy * totalHeight -
+                        resolvedPortSize / 2,
                   ),
                   size: resolvedPortSize,
                   status: isConfig

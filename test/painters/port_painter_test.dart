@@ -18,7 +18,10 @@ void main() {
     });
 
     test('unknown returns dark grey (dark)', () {
-      expect(dark.portColorForStatus(PortStatus.unknown), const Color(0xFF333333));
+      expect(
+        dark.portColorForStatus(PortStatus.unknown),
+        const Color(0xFF333333),
+      );
     });
 
     test('config mode always returns down color', () {
@@ -36,23 +39,41 @@ void main() {
     });
 
     test('light theme uses same port colors as dark', () {
-      expect(light.portColorForStatus(PortStatus.up), dark.portColorForStatus(PortStatus.up));
-      expect(light.portColorForStatus(PortStatus.down), dark.portColorForStatus(PortStatus.down));
-      expect(light.portColorForStatus(PortStatus.unknown), dark.portColorForStatus(PortStatus.unknown));
+      expect(
+        light.portColorForStatus(PortStatus.up),
+        dark.portColorForStatus(PortStatus.up),
+      );
+      expect(
+        light.portColorForStatus(PortStatus.down),
+        dark.portColorForStatus(PortStatus.down),
+      );
+      expect(
+        light.portColorForStatus(PortStatus.unknown),
+        dark.portColorForStatus(PortStatus.unknown),
+      );
     });
   });
 
   group('HostDeviceTheme.labelColorFor', () {
     test('dark port gets light label', () {
-      expect(dark.labelColorFor(const Color(0xFF333333)), const Color(0xFFFFFFFF));
+      expect(
+        dark.labelColorFor(const Color(0xFF333333)),
+        const Color(0xFFFFFFFF),
+      );
     });
 
     test('light port gets dark label (light theme)', () {
-      expect(light.labelColorFor(const Color(0xFFE0E0E0)), const Color(0xFF444444));
+      expect(
+        light.labelColorFor(const Color(0xFFE0E0E0)),
+        const Color(0xFF444444),
+      );
     });
 
     test('green port gets white label', () {
-      expect(light.labelColorFor(const Color(0xFF34A853)), const Color(0xFFFFFFFF));
+      expect(
+        light.labelColorFor(const Color(0xFF34A853)),
+        const Color(0xFFFFFFFF),
+      );
     });
   });
 
@@ -62,7 +83,10 @@ void main() {
     });
 
     test('dark and light are not equal', () {
-      expect(const HostDeviceTheme.dark() == const HostDeviceTheme.light(), isFalse);
+      expect(
+        const HostDeviceTheme.dark() == const HostDeviceTheme.light(),
+        isFalse,
+      );
     });
   });
 

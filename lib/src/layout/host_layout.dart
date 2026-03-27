@@ -61,9 +61,6 @@ class HostLayout {
     Size viewportSize, {
     double centerYFactor = 0.6,
   }) {
-    return Offset(
-      viewportSize.width / 2,
-      viewportSize.height * centerYFactor,
-    );
+    return Offset(viewportSize.width / 2, viewportSize.height * centerYFactor);
   }
 }

@@ -78,10 +78,7 @@ class _DemoPageState extends State<DemoPage> {
     6: 'SAN',
   };
 
-  static const _agentLabels = {
-    1: 'NETA',
-    2: 'NETB',
-  };
+  static const _agentLabels = {1: 'NETA', 2: 'NETB'};
 
   List<int> get _portCounts =>
       _scenario == _Scenario.host ? _hostPortCounts : _agentPortCounts;
@@ -147,10 +144,10 @@ class _DemoPageState extends State<DemoPage> {
                 DropdownButton<int>(
                   value: _selectedPortCount,
                   items: _portCounts
-                      .map((c) => DropdownMenuItem(
-                            value: c,
-                            child: Text('$c ports'),
-                          ))
+                      .map(
+                        (c) =>
+                            DropdownMenuItem(value: c, child: Text('$c ports')),
+                      )
                       .toList(),
                   onChanged: (v) => setState(() {
                     _selectedPortCount = v!;
@@ -185,12 +182,10 @@ class _DemoPageState extends State<DemoPage> {
                   segments: const [
                     ButtonSegment(value: ThemeMode.dark, label: Text('Dark')),
                     ButtonSegment(value: ThemeMode.light, label: Text('Light')),
-                    ButtonSegment(
-                        value: ThemeMode.system, label: Text('Auto')),
+                    ButtonSegment(value: ThemeMode.system, label: Text('Auto')),
                   ],
                   selected: {widget.themeMode},
-                  onSelectionChanged: (s) =>
-                      widget.onThemeModeChanged(s.first),
+                  onSelectionChanged: (s) => widget.onThemeModeChanged(s.first),
                 ),
               ],
             ),
@@ -235,14 +230,22 @@ class _DemoPageState extends State<DemoPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Event Log',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  'Event Log',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 Expanded(
                   child: ListView(
                     children: _eventLog
-                        .map((e) => Text(e,
+                        .map(
+                          (e) => Text(
+                            e,
                             style: const TextStyle(
-                                fontSize: 12, fontFamily: 'monospace')))
+                              fontSize: 12,
+                              fontFamily: 'monospace',
+                            ),
+                          ),
+                        )
                         .toList(),
                   ),
                 ),

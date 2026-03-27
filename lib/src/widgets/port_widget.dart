@@ -65,9 +65,10 @@ class _PortWidgetState extends State<PortWidget>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _floatOffset = Tween<double>(begin: 0, end: -3).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _floatOffset = Tween<double>(
+      begin: 0,
+      end: -3,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     if (widget.isSelected) {
       _controller.forward();
     }
@@ -109,54 +110,54 @@ class _PortWidgetState extends State<PortWidget>
       top: widget.position.dy,
       child: _maybeWrapOpacity(
         child: MouseRegion(
-        onEnter: (_) {
-          _controller.forward();
-          widget.onHover?.call();
-        },
-        onExit: (_) {
-          if (!widget.isSelected) {
-            _controller.reverse();
-          }
-          widget.onHoverExit?.call();
-        },
-        child: GestureDetector(
-          onTap: widget.onTap,
-          child: AnimatedBuilder(
-            animation: _floatOffset,
-            builder: (context, child) => Transform.translate(
-              offset: Offset(0, _floatOffset.value),
-              child: child,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: widget.size,
-                  height: widget.size,
-                  child: CustomPaint(
-                    painter: TopoPortPainter(
-                      isUp: widget.status == PortStatus.up,
-                      isDisabled: widget.status == PortStatus.unknown,
-                      style: TopoIconStyle.lnm,
+          onEnter: (_) {
+            _controller.forward();
+            widget.onHover?.call();
+          },
+          onExit: (_) {
+            if (!widget.isSelected) {
+              _controller.reverse();
+            }
+            widget.onHoverExit?.call();
+          },
+          child: GestureDetector(
+            onTap: widget.onTap,
+            child: AnimatedBuilder(
+              animation: _floatOffset,
+              builder: (context, child) => Transform.translate(
+                offset: Offset(0, _floatOffset.value),
+                child: child,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: widget.size,
+                    height: widget.size,
+                    child: CustomPaint(
+                      painter: TopoPortPainter(
+                        isUp: widget.status == PortStatus.up,
+                        isDisabled: widget.status == PortStatus.unknown,
+                        style: TopoIconStyle.lnm,
+                      ),
+                      child: const SizedBox.expand(),
                     ),
-                    child: const SizedBox.expand(),
                   ),
-                ),
-                Text(
-                  widget.label ?? '${widget.portNumber}',
-                  style: TextStyle(
-                    color: labelColor,
-                    fontSize: (widget.size * 0.28).clamp(8.0, 12.0),
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
+                  Text(
+                    widget.label ?? '${widget.portNumber}',
+                    style: TextStyle(
+                      color: labelColor,
+                      fontSize: (widget.size * 0.28).clamp(8.0, 12.0),
+                      fontWeight: FontWeight.bold,
+                      height: 1.2,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
     );
   }
 }

@@ -30,7 +30,8 @@ class HostIconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final resolvedTheme = theme ??
+    final resolvedTheme =
+        theme ??
         (Theme.of(context).brightness == Brightness.dark
             ? const HostDeviceTheme.dark()
             : const HostDeviceTheme.light());
@@ -44,8 +45,9 @@ class HostIconWidget extends StatelessWidget {
         clipper: _HostIconClipper(),
         color: resolvedTheme.bodyGradientEnd,
         elevation: elevation,
-        shadowColor:
-            Colors.black.withValues(alpha: resolvedTheme.shadowOpacity),
+        shadowColor: Colors.black.withValues(
+          alpha: resolvedTheme.shadowOpacity,
+        ),
         child: CustomPaint(
           painter: HostIconPainter(theme: resolvedTheme),
           child: const SizedBox.expand(),
@@ -70,29 +72,30 @@ class _HostIconClipper extends CustomClipper<Path> {
     final path = Path();
 
     // Monitor
-    path.addRRect(RRect.fromRectAndRadius(
-      Rect.fromLTWH(0, 0, w, monitorH),
-      Radius.circular(cornerR),
-    ));
+    path.addRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, w, monitorH),
+        Radius.circular(cornerR),
+      ),
+    );
 
     // Neck
     final neckLeft = (w - neckW) / 2;
-    path.addRect(Rect.fromLTRB(
-      neckLeft,
-      monitorH,
-      neckLeft + neckW,
-      monitorH + neckH,
-    ));
+    path.addRect(
+      Rect.fromLTRB(neckLeft, monitorH, neckLeft + neckW, monitorH + neckH),
+    );
 
     // Base
     final baseLeft = (w - baseW) / 2;
-    path.addRRect(RRect.fromRectAndCorners(
-      Rect.fromLTWH(baseLeft, monitorH + neckH, baseW, baseH),
-      topLeft: const Radius.circular(1.5),
-      topRight: const Radius.circular(1.5),
-      bottomLeft: const Radius.circular(3.0),
-      bottomRight: const Radius.circular(3.0),
-    ));
+    path.addRRect(
+      RRect.fromRectAndCorners(
+        Rect.fromLTWH(baseLeft, monitorH + neckH, baseW, baseH),
+        topLeft: const Radius.circular(1.5),
+        topRight: const Radius.circular(1.5),
+        bottomLeft: const Radius.circular(3.0),
+        bottomRight: const Radius.circular(3.0),
+      ),
+    );
 
     return path;
   }

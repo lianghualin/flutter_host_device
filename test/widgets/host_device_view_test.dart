@@ -10,89 +10,85 @@ void main() {
 
   group('HostDeviceView', () {
     testWidgets('renders without error for 5 ports', (tester) async {
-      await tester.pumpWidget(wrapInApp(
-        HostDeviceView(
-          size: const Size(800, 400),
-          portCount: 5,
-        ),
-      ));
+      await tester.pumpWidget(
+        wrapInApp(HostDeviceView(size: const Size(800, 400), portCount: 5)),
+      );
       expect(find.byType(HostDeviceView), findsOneWidget);
     });
 
     testWidgets('renders without error for 1 port', (tester) async {
-      await tester.pumpWidget(wrapInApp(
-        HostDeviceView(
-          size: const Size(800, 400),
-          portCount: 1,
-        ),
-      ));
+      await tester.pumpWidget(
+        wrapInApp(HostDeviceView(size: const Size(800, 400), portCount: 1)),
+      );
       expect(find.byType(HostDeviceView), findsOneWidget);
     });
 
     testWidgets('renders without error for 12 ports', (tester) async {
-      await tester.pumpWidget(wrapInApp(
-        HostDeviceView(
-          size: const Size(800, 400),
-          portCount: 12,
-        ),
-      ));
+      await tester.pumpWidget(
+        wrapInApp(HostDeviceView(size: const Size(800, 400), portCount: 12)),
+      );
       expect(find.byType(HostDeviceView), findsOneWidget);
     });
 
     testWidgets('renders without error for 0 ports', (tester) async {
-      await tester.pumpWidget(wrapInApp(
-        HostDeviceView(
-          size: const Size(800, 400),
-          portCount: 0,
-        ),
-      ));
+      await tester.pumpWidget(
+        wrapInApp(HostDeviceView(size: const Size(800, 400), portCount: 0)),
+      );
       expect(find.byType(HostDeviceView), findsOneWidget);
     });
 
     testWidgets('displays center label', (tester) async {
-      await tester.pumpWidget(wrapInApp(
-        HostDeviceView(
-          size: const Size(800, 400),
-          portCount: 3,
-          centerLabel: 'Host-Server-01',
+      await tester.pumpWidget(
+        wrapInApp(
+          HostDeviceView(
+            size: const Size(800, 400),
+            portCount: 3,
+            centerLabel: 'Host-Server-01',
+          ),
         ),
-      ));
+      );
       expect(find.text('Host-Server-01'), findsOneWidget);
     });
 
     testWidgets('fires onPortTap callback', (tester) async {
       int? tappedPort;
-      await tester.pumpWidget(wrapInApp(
-        HostDeviceView(
-          size: const Size(800, 400),
-          portCount: 5,
-          onPortTap: (port) => tappedPort = port,
+      await tester.pumpWidget(
+        wrapInApp(
+          HostDeviceView(
+            size: const Size(800, 400),
+            portCount: 5,
+            onPortTap: (port) => tappedPort = port,
+          ),
         ),
-      ));
+      );
       await tester.tap(find.text('1'));
       expect(tappedPort, 1);
     });
 
     testWidgets('renders with config mode', (tester) async {
-      await tester.pumpWidget(wrapInApp(
-        HostDeviceView(
-          size: const Size(800, 400),
-          portCount: 5,
-          portStatuses: const {1: PortStatus.up, 2: PortStatus.up},
-          isConfig: true,
+      await tester.pumpWidget(
+        wrapInApp(
+          HostDeviceView(
+            size: const Size(800, 400),
+            portCount: 5,
+            portStatuses: const {1: PortStatus.up, 2: PortStatus.up},
+            isConfig: true,
+          ),
         ),
-      ));
+      );
       expect(find.byType(HostDeviceView), findsOneWidget);
     });
 
     testWidgets('renders with custom centerYFactor', (tester) async {
-      await tester.pumpWidget(wrapInApp(
-        HostDeviceView(
-          size: const Size(800, 400),
-          portCount: 5,
-          centerYFactor: 0.4,
+      await tester.pumpWidget(
+        wrapInApp(
+          HostDeviceView(
+            size: const Size(800, 400),
+            portCount: 5,
+            centerYFactor: 0.4,
+          ),
         ),
-      ));
+      );
       expect(find.byType(HostDeviceView), findsOneWidget);
     });
   });
