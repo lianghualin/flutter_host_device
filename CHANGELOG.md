@@ -1,3 +1,12 @@
+## 0.3.0
+
+- Add `selectedPortNumbers` parameter for port selection state
+- Add `unselectedPortOpacity` parameter for spotlight dimming of unselected ports
+- Selected ports keep hover float animation at the forward position
+- Add `isSelected` and `opacity` parameters to `PortWidget`
+- Add spotlight mode demo to example app
+- 75 tests
+
 ## 0.2.0
 
 - Add Agent (DPU) scenario support with `TopoDeviceType.agent`

@@ -11,6 +11,7 @@ A Flutter widget that renders host and agent (DPU) devices with ports arranged i
 - Configurable port size for different device form factors
 - Dark and light theme support with auto-detection
 - Custom port labels and replaceable center device
+- Port selection state with spotlight mode — selected ports stay visually active, unselected ports dim
 - `getPortPositions()` API for consumers drawing connection lines
 - Supports all device types: host, agent, router, server, switch, firewall, etc.
 
@@ -20,7 +21,7 @@ Add the dependency:
 
 ```yaml
 dependencies:
-  flutter_host_device: ^0.2.0
+  flutter_host_device: ^0.3.0
 ```
 
 ## Usage
@@ -97,6 +98,25 @@ HostDeviceView(
   },
   portLabels: {1: 'NETA', 2: 'NETB'},
   // ...
+)
+```
+
+### Port selection / spotlight mode
+
+Tap a port to select it — the selected port stays visually active while others dim:
+
+```dart
+// In a StatefulWidget:
+int? _selectedPort;
+
+HostDeviceView(
+  size: Size(800, 400),
+  portCount: 6,
+  selectedPortNumbers: _selectedPort != null ? {_selectedPort!} : {},
+  unselectedPortOpacity: _selectedPort != null ? 0.15 : 1.0,
+  onPortTap: (port) => setState(() {
+    _selectedPort = _selectedPort == port ? null : port;
+  }),
 )
 ```
 
