@@ -113,5 +113,119 @@ void main() {
       ));
       expect(find.byType(PortWidget), findsOneWidget);
     });
+
+    testWidgets('holds float animation forward when isSelected is true',
+        (tester) async {
+      await tester.pumpWidget(wrapInApp(
+        PortWidget(
+          portNumber: 1,
+          position: const Offset(100, 100),
+          size: 30,
+          status: PortStatus.up,
+          theme: theme,
+          isSelected: true,
+        ),
+      ));
+      // Let animation complete
+      await tester.pumpAndSettle();
+
+      // The Transform.translate should have the float offset applied (-3)
+      final transform = tester.widget<Transform>(
+        find.descendant(
+          of: find.byType(GestureDetector),
+          matching: find.byType(Transform),
+        ),
+      );
+      expect(transform.transform.getTranslation().y, -3.0);
+    });
+
+    testWidgets('animation stays at rest when isSelected is false',
+        (tester) async {
+      await tester.pumpWidget(wrapInApp(
+        PortWidget(
+          portNumber: 1,
+          position: const Offset(100, 100),
+          size: 30,
+          status: PortStatus.up,
+          theme: theme,
+          isSelected: false,
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      final transform = tester.widget<Transform>(
+        find.descendant(
+          of: find.byType(GestureDetector),
+          matching: find.byType(Transform),
+        ),
+      );
+      expect(transform.transform.getTranslation().y, 0.0);
+    });
+
+    testWidgets('toggling isSelected drives animation forward and back',
+        (tester) async {
+      await tester.pumpWidget(wrapInApp(
+        PortWidget(
+          portNumber: 1,
+          position: const Offset(100, 100),
+          size: 30,
+          status: PortStatus.up,
+          theme: theme,
+          isSelected: false,
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      // Verify at rest
+      var transform = tester.widget<Transform>(
+        find.descendant(
+          of: find.byType(GestureDetector),
+          matching: find.byType(Transform),
+        ),
+      );
+      expect(transform.transform.getTranslation().y, 0.0);
+
+      // Select the port
+      await tester.pumpWidget(wrapInApp(
+        PortWidget(
+          portNumber: 1,
+          position: const Offset(100, 100),
+          size: 30,
+          status: PortStatus.up,
+          theme: theme,
+          isSelected: true,
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      transform = tester.widget<Transform>(
+        find.descendant(
+          of: find.byType(GestureDetector),
+          matching: find.byType(Transform),
+        ),
+      );
+      expect(transform.transform.getTranslation().y, -3.0);
+
+      // Deselect the port
+      await tester.pumpWidget(wrapInApp(
+        PortWidget(
+          portNumber: 1,
+          position: const Offset(100, 100),
+          size: 30,
+          status: PortStatus.up,
+          theme: theme,
+          isSelected: false,
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      transform = tester.widget<Transform>(
+        find.descendant(
+          of: find.byType(GestureDetector),
+          matching: find.byType(Transform),
+        ),
+      );
+      expect(transform.transform.getTranslation().y, 0.0);
+    });
   });
 }

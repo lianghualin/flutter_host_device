@@ -15,6 +15,7 @@ class PortWidget extends StatefulWidget {
     required this.theme,
     this.label,
     this.isConfig = false,
+    this.isSelected = false,
     this.onHover,
     this.onHoverExit,
     this.onTap,
@@ -34,6 +35,11 @@ class PortWidget extends StatefulWidget {
   final PortStatus status;
   final HostDeviceTheme theme;
   final bool isConfig;
+
+  /// When true, the hover float animation is held at the forward position
+  /// regardless of mouse hover state.
+  final bool isSelected;
+
   final VoidCallback? onHover;
   final VoidCallback? onHoverExit;
   final VoidCallback? onTap;
@@ -57,6 +63,21 @@ class _PortWidgetState extends State<PortWidget>
     _floatOffset = Tween<double>(begin: 0, end: -3).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
+    if (widget.isSelected) {
+      _controller.forward();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant PortWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isSelected != oldWidget.isSelected) {
+      if (widget.isSelected) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    }
   }
 
   @override
@@ -82,7 +103,9 @@ class _PortWidgetState extends State<PortWidget>
           widget.onHover?.call();
         },
         onExit: (_) {
-          _controller.reverse();
+          if (!widget.isSelected) {
+            _controller.reverse();
+          }
           widget.onHoverExit?.call();
         },
         child: GestureDetector(
