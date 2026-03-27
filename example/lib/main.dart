@@ -65,6 +65,8 @@ class _DemoPageState extends State<DemoPage> {
   bool _isConfig = false;
   bool _useCustomLabels = false;
   final List<String> _eventLog = [];
+  int? _selectedPort;
+  bool _spotlightMode = false;
 
   static const _hostPortCounts = [1, 2, 3, 4, 5, 6];
   static const _agentPortCounts = [1, 2];
@@ -99,6 +101,7 @@ class _DemoPageState extends State<DemoPage> {
           ? _selectedPortCount
           : _portCounts.last;
       _portStatuses = {};
+      _selectedPort = null;
     });
   }
 
@@ -152,6 +155,7 @@ class _DemoPageState extends State<DemoPage> {
                   onChanged: (v) => setState(() {
                     _selectedPortCount = v!;
                     _portStatuses = {};
+                    _selectedPort = null;
                   }),
                 ),
                 ElevatedButton(
@@ -175,6 +179,19 @@ class _DemoPageState extends State<DemoPage> {
                     Switch(
                       value: _useCustomLabels,
                       onChanged: (v) => setState(() => _useCustomLabels = v),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Spotlight'),
+                    Switch(
+                      value: _spotlightMode,
+                      onChanged: (v) => setState(() {
+                        _spotlightMode = v;
+                        if (!v) _selectedPort = null;
+                      }),
                     ),
                   ],
                 ),
@@ -208,9 +225,21 @@ class _DemoPageState extends State<DemoPage> {
                     portLabels: _useCustomLabels ? _customLabels : const {},
                     isConfig: _isConfig,
                     centerLabel: _centerLabel,
+                    selectedPortNumbers: _selectedPort != null
+                        ? {_selectedPort!}
+                        : const {},
+                    unselectedPortOpacity:
+                        _spotlightMode && _selectedPort != null ? 0.15 : 1.0,
                     onPortHover: (port) => _log('Hover: port $port'),
                     onPortHoverExit: () {},
-                    onPortTap: (port) => _log('Tap: port $port'),
+                    onPortTap: (port) {
+                      _log('Tap: port $port');
+                      if (_spotlightMode) {
+                        setState(() {
+                          _selectedPort = _selectedPort == port ? null : port;
+                        });
+                      }
+                    },
                     onHostHover: () {},
                     onHostHoverExit: () {},
                   );
