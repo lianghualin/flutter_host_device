@@ -67,6 +67,8 @@ class _DemoPageState extends State<DemoPage> {
   final List<String> _eventLog = [];
   int? _selectedPort;
   bool _spotlightMode = false;
+  bool _enableHoverAnimation = true;
+  bool _showPortLabels = true;
 
   static const _hostPortCounts = [1, 2, 3, 4, 5, 6];
   static const _agentPortCounts = [1, 2];
@@ -195,6 +197,27 @@ class _DemoPageState extends State<DemoPage> {
                     ),
                   ],
                 ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Hover anim'),
+                    Switch(
+                      value: _enableHoverAnimation,
+                      onChanged: (v) =>
+                          setState(() => _enableHoverAnimation = v),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Port labels'),
+                    Switch(
+                      value: _showPortLabels,
+                      onChanged: (v) => setState(() => _showPortLabels = v),
+                    ),
+                  ],
+                ),
                 SegmentedButton<ThemeMode>(
                   segments: const [
                     ButtonSegment(value: ThemeMode.dark, label: Text('Dark')),
@@ -230,6 +253,8 @@ class _DemoPageState extends State<DemoPage> {
                         : const {},
                     unselectedPortOpacity:
                         _spotlightMode && _selectedPort != null ? 0.15 : 1.0,
+                    enablePortHoverAnimation: _enableHoverAnimation,
+                    showPortLabels: _showPortLabels,
                     onPortHover: (port) => _log('Hover: port $port'),
                     onPortHoverExit: () {},
                     onPortTap: (port) {

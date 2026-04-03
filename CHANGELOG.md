@@ -1,3 +1,12 @@
+## 0.3.1
+
+- Add `enablePortHoverAnimation` parameter to disable port hover float animation
+- Add `showPortLabels` parameter to hide port labels entirely
+- Add `portLabelStyle` parameter for custom port label text styling
+- Add semi-transparent background pill behind port labels for improved readability
+- Add `portLabelBackgroundDecoration` parameter to customize or disable the label pill
+- Add hover animation and port label toggles to example app
+
 ## 0.3.0
 
 - Add `selectedPortNumbers` parameter for port selection state

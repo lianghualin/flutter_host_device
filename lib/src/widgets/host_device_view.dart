@@ -33,6 +33,10 @@ class HostDeviceView extends StatelessWidget {
     this.onHostHoverExit,
     this.selectedPortNumbers = const {},
     this.unselectedPortOpacity = 1.0,
+    this.enablePortHoverAnimation = true,
+    this.showPortLabels = true,
+    this.portLabelStyle,
+    this.portLabelBackgroundDecoration,
     this.theme,
   });
 
@@ -86,6 +90,20 @@ class HostDeviceView extends StatelessWidget {
   /// Opacity applied to ports NOT in [selectedPortNumbers] when the selection
   /// is non-empty. Defaults to 1.0 (no dimming). Use ~0.15 for spotlight mode.
   final double unselectedPortOpacity;
+
+  /// When false, ports remain static on hover — no float animation.
+  /// Tap and status callbacks still fire normally. Defaults to true.
+  final bool enablePortHoverAnimation;
+
+  /// When false, port labels are hidden entirely. Defaults to true.
+  final bool showPortLabels;
+
+  /// Custom text style for port labels. When null, uses the default style.
+  final TextStyle? portLabelStyle;
+
+  /// Custom decoration for the port label background pill.
+  /// When null, a default semi-transparent rounded background is used.
+  final BoxDecoration? portLabelBackgroundDecoration;
 
   /// Optional theme override. When null, auto-detects from app brightness.
   final HostDeviceTheme? theme;
@@ -212,10 +230,14 @@ class HostDeviceView extends StatelessWidget {
                   theme: resolvedTheme,
                   isConfig: isConfig,
                   isSelected: selectedPortNumbers.contains(entry.key),
+                  enableHoverAnimation: enablePortHoverAnimation,
                   opacity:
                       hasSelection && !selectedPortNumbers.contains(entry.key)
                       ? unselectedPortOpacity
                       : 1.0,
+                  showLabel: showPortLabels,
+                  labelStyle: portLabelStyle,
+                  labelBackgroundDecoration: portLabelBackgroundDecoration,
                   onHover: () => onPortHover?.call(entry.key),
                   onHoverExit: onPortHoverExit,
                   onTap: () => onPortTap?.call(entry.key),
@@ -236,10 +258,14 @@ class HostDeviceView extends StatelessWidget {
                   theme: resolvedTheme,
                   isConfig: isConfig,
                   isSelected: selectedPortNumbers.contains(entry.key),
+                  enableHoverAnimation: enablePortHoverAnimation,
                   opacity:
                       hasSelection && !selectedPortNumbers.contains(entry.key)
                       ? unselectedPortOpacity
                       : 1.0,
+                  showLabel: showPortLabels,
+                  labelStyle: portLabelStyle,
+                  labelBackgroundDecoration: portLabelBackgroundDecoration,
                   onHover: () => onPortHover?.call(entry.key),
                   onHoverExit: onPortHoverExit,
                   onTap: () => onPortTap?.call(entry.key),

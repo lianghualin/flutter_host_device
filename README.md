@@ -12,6 +12,8 @@ A Flutter widget that renders host and agent (DPU) devices with ports arranged i
 - Dark and light theme support with auto-detection
 - Custom port labels and replaceable center device
 - Port selection state with spotlight mode — selected ports stay visually active, unselected ports dim
+- Disable port hover animation for static topology views (`enablePortHoverAnimation`)
+- Configurable port label styling, background pill, and visibility toggle
 - `getPortPositions()` API for consumers drawing connection lines
 - Supports all device types: host, agent, router, server, switch, firewall, etc.
 
@@ -21,7 +23,7 @@ Add the dependency:
 
 ```yaml
 dependencies:
-  flutter_host_device: ^0.3.0
+  flutter_host_device: ^0.3.1
 ```
 
 ## Usage
@@ -117,6 +119,29 @@ HostDeviceView(
   onPortTap: (port) => setState(() {
     _selectedPort = _selectedPort == port ? null : port;
   }),
+)
+```
+
+### Disable port hover animation
+
+For static topology views where the hover float is unnecessary:
+
+```dart
+HostDeviceView(
+  enablePortHoverAnimation: false,
+  // ...
+)
+```
+
+### Custom port label styling
+
+Override label appearance or hide labels entirely:
+
+```dart
+HostDeviceView(
+  portLabelStyle: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w600),
+  showPortLabels: false,  // hide labels to render your own overlay
+  // ...
 )
 ```
 

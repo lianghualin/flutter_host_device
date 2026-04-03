@@ -16,7 +16,11 @@ class PortWidget extends StatefulWidget {
     this.label,
     this.isConfig = false,
     this.isSelected = false,
+    this.enableHoverAnimation = true,
     this.opacity = 1.0,
+    this.showLabel = true,
+    this.labelStyle,
+    this.labelBackgroundDecoration,
     this.onHover,
     this.onHoverExit,
     this.onTap,
@@ -41,9 +45,24 @@ class PortWidget extends StatefulWidget {
   /// regardless of mouse hover state.
   final bool isSelected;
 
+  /// When false, the port hover float animation is disabled. Ports remain
+  /// static on hover. Tap and status callbacks still fire normally.
+  final bool enableHoverAnimation;
+
   /// Opacity for the entire port widget. Defaults to 1.0 (fully opaque).
   /// Use values < 1.0 to dim unselected ports in spotlight mode.
   final double opacity;
+
+  /// When false, the port label text is hidden.
+  final bool showLabel;
+
+  /// Custom text style for the port label. When null, uses the default style.
+  final TextStyle? labelStyle;
+
+  /// Custom decoration for the port label background pill.
+  /// When null, a default semi-transparent rounded background is used.
+  /// Set to [BoxDecoration()] (empty) to disable the background pill.
+  final BoxDecoration? labelBackgroundDecoration;
 
   final VoidCallback? onHover;
   final VoidCallback? onHoverExit;
@@ -69,7 +88,7 @@ class _PortWidgetState extends State<PortWidget>
       begin: 0,
       end: -3,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-    if (widget.isSelected) {
+    if (widget.enableHoverAnimation && widget.isSelected) {
       _controller.forward();
     }
   }
@@ -77,6 +96,10 @@ class _PortWidgetState extends State<PortWidget>
   @override
   void didUpdateWidget(covariant PortWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (!widget.enableHoverAnimation) {
+      _controller.value = 0;
+      return;
+    }
     if (widget.isSelected != oldWidget.isSelected) {
       if (widget.isSelected) {
         _controller.forward();
@@ -111,11 +134,11 @@ class _PortWidgetState extends State<PortWidget>
       child: _maybeWrapOpacity(
         child: MouseRegion(
           onEnter: (_) {
-            _controller.forward();
+            if (widget.enableHoverAnimation) _controller.forward();
             widget.onHover?.call();
           },
           onExit: (_) {
-            if (!widget.isSelected) {
+            if (widget.enableHoverAnimation && !widget.isSelected) {
               _controller.reverse();
             }
             widget.onHoverExit?.call();
@@ -143,15 +166,30 @@ class _PortWidgetState extends State<PortWidget>
                       child: const SizedBox.expand(),
                     ),
                   ),
-                  Text(
-                    widget.label ?? '${widget.portNumber}',
-                    style: TextStyle(
-                      color: labelColor,
-                      fontSize: (widget.size * 0.28).clamp(8.0, 12.0),
-                      fontWeight: FontWeight.bold,
-                      height: 1.2,
+                  if (widget.showLabel)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 3,
+                        vertical: 1,
+                      ),
+                      decoration:
+                          widget.labelBackgroundDecoration ??
+                          BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                      child: Text(
+                        widget.label ?? '${widget.portNumber}',
+                        style:
+                            widget.labelStyle ??
+                            TextStyle(
+                              color: labelColor,
+                              fontSize: (widget.size * 0.28).clamp(8.0, 12.0),
+                              fontWeight: FontWeight.bold,
+                              height: 1.2,
+                            ),
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
