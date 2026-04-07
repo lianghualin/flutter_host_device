@@ -18,9 +18,7 @@ class PortWidget extends StatefulWidget {
     this.isSelected = false,
     this.enableHoverAnimation = true,
     this.opacity = 1.0,
-    this.showLabel = true,
-    this.labelStyle,
-    this.labelBackgroundDecoration,
+    this.showIconText = true,
     this.onHover,
     this.onHoverExit,
     this.onTap,
@@ -53,16 +51,9 @@ class PortWidget extends StatefulWidget {
   /// Use values < 1.0 to dim unselected ports in spotlight mode.
   final double opacity;
 
-  /// When false, the port label text is hidden.
-  final bool showLabel;
-
-  /// Custom text style for the port label. When null, uses the default style.
-  final TextStyle? labelStyle;
-
-  /// Custom decoration for the port label background pill.
-  /// When null, a default semi-transparent rounded background is used.
-  /// Set to [BoxDecoration()] (empty) to disable the background pill.
-  final BoxDecoration? labelBackgroundDecoration;
+  /// When false, the text rendered immediately below the port icon is hidden.
+  /// This is the "tight" label that appears on/near the port at small sizes.
+  final bool showIconText;
 
   final VoidCallback? onHover;
   final VoidCallback? onHoverExit;
@@ -166,28 +157,14 @@ class _PortWidgetState extends State<PortWidget>
                       child: const SizedBox.expand(),
                     ),
                   ),
-                  if (widget.showLabel)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 3,
-                        vertical: 1,
-                      ),
-                      decoration:
-                          widget.labelBackgroundDecoration ??
-                          BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.5),
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                      child: Text(
-                        widget.label ?? '${widget.portNumber}',
-                        style:
-                            widget.labelStyle ??
-                            TextStyle(
-                              color: labelColor,
-                              fontSize: (widget.size * 0.28).clamp(8.0, 12.0),
-                              fontWeight: FontWeight.bold,
-                              height: 1.2,
-                            ),
+                  if (widget.showIconText)
+                    Text(
+                      widget.label ?? '${widget.portNumber}',
+                      style: TextStyle(
+                        color: labelColor,
+                        fontSize: (widget.size * 0.28).clamp(8.0, 12.0),
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
                       ),
                     ),
                 ],

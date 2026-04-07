@@ -68,6 +68,7 @@ class _DemoPageState extends State<DemoPage> {
   int? _selectedPort;
   bool _spotlightMode = false;
   bool _enableHoverAnimation = true;
+  bool _showPortIconText = true;
   bool _showPortLabels = true;
 
   static const _hostPortCounts = [1, 2, 3, 4, 5, 6];
@@ -211,6 +212,16 @@ class _DemoPageState extends State<DemoPage> {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    const Text('Icon text'),
+                    Switch(
+                      value: _showPortIconText,
+                      onChanged: (v) => setState(() => _showPortIconText = v),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     const Text('Port labels'),
                     Switch(
                       value: _showPortLabels,
@@ -254,6 +265,7 @@ class _DemoPageState extends State<DemoPage> {
                     unselectedPortOpacity:
                         _spotlightMode && _selectedPort != null ? 0.15 : 1.0,
                     enablePortHoverAnimation: _enableHoverAnimation,
+                    showPortIconText: _showPortIconText,
                     showPortLabels: _showPortLabels,
                     onPortHover: (port) => _log('Hover: port $port'),
                     onPortHoverExit: () {},

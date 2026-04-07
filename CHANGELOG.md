@@ -1,10 +1,16 @@
+## 0.3.2
+
+- **Breaking:** Split label controls into `showPortIconText` (tight text on/near port icon) and `showPortLabels` (external label below port with background pill)
+- External port labels rendered as separate positioned widgets with semi-transparent background pill for improved readability in topology layouts
+- Add `showPortIconText` parameter to independently hide illegible icon text at small port sizes
+- Add icon text toggle to example app
+
 ## 0.3.1
 
 - Add `enablePortHoverAnimation` parameter to disable port hover float animation
-- Add `showPortLabels` parameter to hide port labels entirely
 - Add `portLabelStyle` parameter for custom port label text styling
+- Add `portLabelBackgroundDecoration` parameter to customize the label background pill
 - Add semi-transparent background pill behind port labels for improved readability
-- Add `portLabelBackgroundDecoration` parameter to customize or disable the label pill
 - Add hover animation and port label toggles to example app
 
 ## 0.3.0

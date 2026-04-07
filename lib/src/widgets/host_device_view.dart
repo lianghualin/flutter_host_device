@@ -34,6 +34,7 @@ class HostDeviceView extends StatelessWidget {
     this.selectedPortNumbers = const {},
     this.unselectedPortOpacity = 1.0,
     this.enablePortHoverAnimation = true,
+    this.showPortIconText = true,
     this.showPortLabels = true,
     this.portLabelStyle,
     this.portLabelBackgroundDecoration,
@@ -95,13 +96,19 @@ class HostDeviceView extends StatelessWidget {
   /// Tap and status callbacks still fire normally. Defaults to true.
   final bool enablePortHoverAnimation;
 
-  /// When false, port labels are hidden entirely. Defaults to true.
+  /// When false, the text rendered immediately below the port icon is hidden.
+  /// This is the tight label that can appear illegible at small port sizes.
+  final bool showPortIconText;
+
+  /// When false, the external labels rendered below each port are hidden.
+  /// These labels are positioned further below the port with a background
+  /// pill for better readability in topology layouts.
   final bool showPortLabels;
 
-  /// Custom text style for port labels. When null, uses the default style.
+  /// Custom text style for external port labels. When null, uses a default style.
   final TextStyle? portLabelStyle;
 
-  /// Custom decoration for the port label background pill.
+  /// Custom decoration for the external port label background pill.
   /// When null, a default semi-transparent rounded background is used.
   final BoxDecoration? portLabelBackgroundDecoration;
 
@@ -235,9 +242,7 @@ class HostDeviceView extends StatelessWidget {
                       hasSelection && !selectedPortNumbers.contains(entry.key)
                       ? unselectedPortOpacity
                       : 1.0,
-                  showLabel: showPortLabels,
-                  labelStyle: portLabelStyle,
-                  labelBackgroundDecoration: portLabelBackgroundDecoration,
+                  showIconText: showPortIconText,
                   onHover: () => onPortHover?.call(entry.key),
                   onHoverExit: onPortHoverExit,
                   onTap: () => onPortTap?.call(entry.key),
@@ -263,12 +268,61 @@ class HostDeviceView extends StatelessWidget {
                       hasSelection && !selectedPortNumbers.contains(entry.key)
                       ? unselectedPortOpacity
                       : 1.0,
-                  showLabel: showPortLabels,
-                  labelStyle: portLabelStyle,
-                  labelBackgroundDecoration: portLabelBackgroundDecoration,
+                  showIconText: showPortIconText,
                   onHover: () => onPortHover?.call(entry.key),
                   onHoverExit: onPortHoverExit,
                   onTap: () => onPortTap?.call(entry.key),
+                ),
+
+            // External port labels — rendered below each port with background pill
+            if (showPortLabels)
+              for (final entry
+                  in (portPositionOverride != null
+                          ? {
+                              for (final e in portPositionOverride!.entries)
+                                e.key: Offset(
+                                  bodyLeft + e.value.dx * monitorWidth,
+                                  bodyTop + e.value.dy * totalHeight,
+                                ),
+                            }
+                          : portCenters)
+                      .entries)
+                Positioned(
+                  left: entry.value.dx - resolvedPortSize,
+                  top:
+                      entry.value.dy +
+                      resolvedPortSize / 2 +
+                      (showPortIconText ? 14 : 0) +
+                      2,
+                  width: resolvedPortSize * 2,
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 2,
+                      ),
+                      decoration:
+                          portLabelBackgroundDecoration ??
+                          BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                      child: Text(
+                        portLabels[entry.key] ?? '${entry.key}',
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            portLabelStyle ??
+                            TextStyle(
+                              color: Colors.white,
+                              fontSize: max(10.0, resolvedPortSize * 0.3),
+                              fontWeight: FontWeight.bold,
+                              height: 1.2,
+                            ),
+                      ),
+                    ),
+                  ),
                 ),
           ],
         ),
